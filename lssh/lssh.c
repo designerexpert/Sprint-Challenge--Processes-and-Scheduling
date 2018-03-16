@@ -168,7 +168,11 @@ int main(void)
                                 //Handle GroupName
                                 grp = getgrgid(buf.st_gid);
                                 printf("%s", grp->gr_name);
-                                printf("%8s  %s\n", size, entry->d_name); // Prints out a line containing type/size and name of the item.
+                                // Handle Time
+                                tm = localtime(&buf.st_mtime);
+                                strftime(datestring, sizeof(datestring), nl_langinfo(D_T_FMT), tm);
+                                
+                                printf("%8s  %s %s\n", size, datestring, entry->d_name); // Prints out a line containing type/size and name of the item.
                             }
                         }
                     }
