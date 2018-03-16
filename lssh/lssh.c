@@ -111,6 +111,28 @@ int main(void)
         }
 
         // Setting the current directory for later displaying it.
+        if (args_count == 1)
+        {
+            if (strcmp(args[0], "ls") == 0)
+            {
+                if ((dir = opendir(currentDir)) == NULL)
+                {
+                    perror("Unable to open directory");
+                }
+                else
+                {
+                    while ((entry = readdir(dir)) != NULL)
+                    {
+                        if (entry->d_name[0] != '.')
+                        {
+                            printf("%s\t", entry->d_name); // Prints out a line containing type/size and name of the item.
+                        }
+                    }
+                    printf("\n");
+                }
+                closedir(dir);
+            }
+        }
         if (args_count > 1) // Provided we get more than 1 argument
         {
             if (strcmp(args[1], "-l") == 0)
@@ -131,13 +153,13 @@ int main(void)
                     -rw-r--r--  1 beej  staff  2772 Mar 15 13:27 lssh.c
                     */
                     {
-                        struct stat buf; // Contains each item's system stats.
-                        char size[1024]; // Will contain File size or <DIR>.
-                        struct passwd *pwd;          // holds owners name
-                        struct group *grp;           // Holds group name
+                        struct stat buf;    // Contains each item's system stats.
+                        char size[1024];    // Will contain File size or <DIR>.
+                        struct passwd *pwd; // holds owners name
+                        struct group *grp;  // Holds group name
                         struct tm *tm;
                         char datestring[256];
-                        
+
                         stat(entry->d_name, &buf);   // Extracts stats into buf.
                         if (entry->d_type == DT_DIR) // Checks to see if it is a directory.
                         {
@@ -171,8 +193,8 @@ int main(void)
                                 // Handle Time
                                 tm = localtime(&buf.st_mtime);
                                 strftime(datestring, sizeof(datestring), nl_langinfo(D_T_FMT), tm);
-                                
-                                printf("%8s  %s %s\n", size, datestring, entry->d_name); // Prints out a line containing type/size and name of the item.
+
+                                printf("%8s   %s   %s\n", size, datestring, entry->d_name); // Prints out a line containing type/size and name of the item.
                             }
                         }
                     }
@@ -183,9 +205,9 @@ int main(void)
 
 #if DEBUG
 
-            // Some debugging output
+            //Some debugging output
 
-            // Print out the parsed command line in args[]
+            //Print out the parsed command line in args[]
             // for (int i = 0; args[i] != NULL; i++)
             // {
             //     printf("%d: '%s'\n", i, args[i]);
