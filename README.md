@@ -5,13 +5,24 @@
 Add your answers inline, below, with your pull request.
 
 1. List all of the main states a process may be in at any point in time on a
-   standard Unix system. Briefly explain what each of these states mean.
+standard Unix system. Briefly explain what each of these states mean.
+  * Running: This process is currently running or about to be scheduled for running.
+  * Waiting: The process is waiting on an interrupt or an event to happen.
+  * Stopped: The process is stopped.
+  * Zombie: The process is dead, but is still in the list of processes and taking up memory space.
 
 2. What is a Zombie Process? How does it get created? How does it get destroyed?
+  * A zombie process gets created when the Parent process does not wait for the child to finish, if the child
+  finishes after the parent then this process never gets terminated and remains in memory, but not running.
 
 3. Describe the job of the Scheduler in the OS in general.
+  * The scheduler manages the priority that each process is given and how much time they are given to execute in
+  each processor cycle. It does this to "Create" the fake effect of all processes running simultaneously. They are still running one at a time but each is given a slice of the processor's time to run.
 
 4. Describe the benefits of the MLFQ over a plain Round-Robin scheduler.
+  * MLFQ gives priority to those processes that are newly created, then lowers their priority if they are very processor intensive processes. This way it manages to complete first the small processes that run very fast, and still gives alloted time to complete processes that take a while to finish. MLFQ micromanages fast processes to allow them execution time and maintain user interrupts and such functionality responsive while computing larger processes in "The Background".
+  * In contrast Round-Robbin might have the user waiting an extreme amount of time for something as simple as a mouse interrupt or a keyboard interrupt just because a heavy process is running currently and must finish before yielding processing time.
+
 
 ## Programming Exercise: The Lambda School Shell (`lssh`)
 
