@@ -135,6 +135,9 @@ int main(void)
                         char size[1024]; // Will contain File size or <DIR>.
                         struct passwd *pwd;          // holds owners name
                         struct group *grp;           // Holds group name
+                        struct tm *tm;
+                        char datestring[256];
+                        
                         stat(entry->d_name, &buf);   // Extracts stats into buf.
                         if (entry->d_type == DT_DIR) // Checks to see if it is a directory.
                         {
@@ -155,17 +158,17 @@ int main(void)
                                 printf((buf.st_mode & S_IXGRP) ? "x" : "-");
                                 printf((buf.st_mode & S_IROTH) ? "r" : "-");
                                 printf((buf.st_mode & S_IWOTH) ? "w" : "-");
-                                printf((buf.st_mode & S_IXOTH) ? "x\t" : "-\t");
+                                printf((buf.st_mode & S_IXOTH) ? "x" : "-");
                                 //End Handle Writing Modes
                                 //Handle Links
-                                printf("%4d\t", buf.st_nlink);
+                                printf("%4d ", buf.st_nlink);
                                 //Handle Owner
                                 pwd = getpwuid(buf.st_uid);
-                                printf("%s\t", pwd->pw_name);
+                                printf("%s ", pwd->pw_name);
                                 //Handle GroupName
                                 grp = getgrgid(buf.st_gid);
-                                printf("%s\t", grp->gr_name);
-                                printf("  %8s  %s\n", size, entry->d_name); // Prints out a line containing type/size and name of the item.
+                                printf("%s", grp->gr_name);
+                                printf("%8s  %s\n", size, entry->d_name); // Prints out a line containing type/size and name of the item.
                             }
                         }
                     }
